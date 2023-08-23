@@ -67,9 +67,10 @@ resource "aws_instance" "metabase_ec2" {
 
   user_data = <<-EOF
     #!/bin/bash
-    yum update -y
-    yum install docker -y
-    service docker start
+    apt update -y
+    apt install docker.io -y
+    systemctl start docker
+    usermod -a -G docker ubuntu
     usermod -a -G docker ubuntu
     docker pull metabase/metabase:latest
     docker run -d -p 3000:3000 \
