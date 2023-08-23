@@ -71,7 +71,6 @@ resource "aws_instance" "metabase_ec2" {
     apt install docker.io -y
     systemctl start docker
     usermod -a -G docker ubuntu
-    usermod -a -G docker ubuntu
     docker pull metabase/metabase:latest
     docker run -d -p 3000:3000 \
       -e "MB_DB_TYPE=$DATABASE_DIALECT" \
