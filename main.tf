@@ -71,6 +71,14 @@ resource "aws_instance" "metabase_ec2" {
     apt install docker.io -y
     systemctl start docker
     usermod -a -G docker ubuntu
+    # Create and enable swap space
+    fallocate -l 1G /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+
+    # Add swap entry to /etc/fstab to persist across reboots
+    echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
     docker pull metabase/metabase:latest
     docker run -d -p 3000:3000 \
       -e "MB_DB_TYPE=$DATABASE_DIALECT" \
